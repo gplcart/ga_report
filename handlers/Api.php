@@ -18,10 +18,13 @@ class Api
 {
 
     /**
+     * CURL helper class instance
+     * @var \gplcart\core\helpers\Curl $curl
      */
     protected $curl;
 
     /**
+     * @param CurlHelper $curl
      */
     public function __construct(CurlHelper $curl)
     {
@@ -29,6 +32,8 @@ class Api
     }
 
     /**
+     * Performs request to get API data
+     * @return array
      */
     public function process(array $params, $provider)
     {
