@@ -1,0 +1,12 @@
+{
+    "name": "gplcart/ga_report",
+    "type": "gplcart-module",
+    "description": "Allows administrators to browse various Google Analytics reports right in admin area",
+    "keywords": ["gplcart", "ecommerce", "shopping cart", "gplcart module", "php", "google api", "google analytics"],
+    "license": "GPL-3.0+",
+    "require": {
+        "gplcart/composer-module-installer": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
