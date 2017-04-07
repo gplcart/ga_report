@@ -24,7 +24,7 @@ The following reports are supported out-of-box:
 
 You can extend this list by writing your own handler using hook `module.ga.report.handlers`.
 
-All reports are displayed in plain tables, but you can install an [additional module](https://github.com/gplcart/chart) to turn them into nice charts
+All reports are displayed in plain tables, but you can install an [Chart module](https://github.com/gplcart/chart) to turn them into nice charts
 
 
 
