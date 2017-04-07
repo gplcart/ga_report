@@ -26,7 +26,7 @@
     <?php } else if (empty($report['data']['rows'])) { ?>
     <?php echo $this->text('No results'); ?>
     <?php } else { ?>
-    <div data-chart-settings="<?php echo $this->json($report['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->escape($report['handler']['id']); ?>">
+    <div data-chart-source="<?php echo $this->json($report['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->escape($report['handler']['id']); ?>">
       <table class="table table-condensed table-striped">
         <tbody>
           <tr>
