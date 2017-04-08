@@ -24,7 +24,7 @@ The following reports are supported out-of-box:
 
 You can extend this list by writing your own handler using hook `module.ga.report.handlers`.
 
-All reports are displayed in plain tables, but you can install an [Chart module](https://github.com/gplcart/chart) to turn them into nice charts
+All reports are displayed in plain tables, but you can install the [Chart module](https://github.com/gplcart/chart) to turn them into nice charts
 
 
 
@@ -40,4 +40,4 @@ NOTE: In order to use this module you have to get `Service Account Key` from [Go
 
 **Usage**
 
-All available reports are shown on `admin/report/ga`. You can also add panels on your dashboard panel
+All available reports are shown on `admin/report/ga`. You can also add panels to your dashboard
