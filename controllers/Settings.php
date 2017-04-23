@@ -181,7 +181,7 @@ class Settings extends BackendController
             return null;
         }
 
-        $file = $this->file->getUploadedFile();
+        $file = $this->file->getTransferred();
 
         $certs = array();
         $secret = $this->getSubmitted('certificate_secret');
