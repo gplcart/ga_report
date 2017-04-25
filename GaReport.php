@@ -28,35 +28,6 @@ class GaReport extends Module
     }
 
     /**
-     * Module info
-     * @return array
-     */
-    public function info()
-    {
-        return array(
-            'name' => 'Google Analytics Report',
-            'version' => '1.0.0-dev',
-            'description' => 'Allows administrators to browse various Google Analytics reports right in admin area',
-            'author' => 'Iurii Makukh <gplcart.software@gmail.com>',
-            'core' => '1.x',
-            'license' => 'GPL-3.0+',
-            'configure' => 'admin/module/settings/ga_report',
-            'settings' => array(
-                'certificate_file' => '',
-                'certificate_secret' => 'notasecret',
-                'service_account_id' => '',
-                'limit' => 10,
-                'cache' => 86400,
-                'start_date' => '-1 month',
-                'end_date' => 'now',
-                'store_id' => 1,
-                'dashboard' => array(),
-                'ga_profile_id' => array()
-            )
-        );
-    }
-
-    /**
      * Implements hook "route.list"
      * @param array $routes
      */
