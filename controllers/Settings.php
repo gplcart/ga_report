@@ -137,7 +137,7 @@ class Settings extends BackendController
      */
     protected function deleteCertificateSettings()
     {
-        $file = GC_FILE_DIR . '/' . $this->config->module('ga_report', 'certificate_file');
+        $file = GC_PRIVATE_MODULE_DIR . '/' . $this->config->module('ga_report', 'certificate_file');
 
         if (file_exists($file) && unlink($file)) {
             $this->setMessage($this->text('Certificate has been deleted from the server'), 'success', true);
@@ -174,7 +174,7 @@ class Settings extends BackendController
 
         $this->validateElement('certificate_secret', 'required');
 
-        $result = $this->file->upload($upload, false, 'private/google-analytics');
+        $result = $this->file->upload($upload, false, GC_PRIVATE_MODULE_DIR . '/google-analytics');
 
         if ($result !== true) {
             $this->setError('file', $result);
