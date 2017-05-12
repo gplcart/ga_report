@@ -27,12 +27,16 @@ trait ControllerTrait
             $settings['store_id'] = $store_id;
         }
 
-        $settings['query'] = array(
-            'max-results' => $settings['limit'],
-            'end-date' => date('Y-m-d', strtotime($settings['end_date'])),
-            'start-date' => date('Y-m-d', strtotime($settings['start_date'])),
-            'ids' => 'ga:' . $settings['ga_profile_id'][$settings['store_id']]
-        );
+        if (empty($settings['ga_profile_id'][$settings['store_id']])) {
+            $settings['query'] = array();
+        } else {
+            $settings['query'] = array(
+                'max-results' => $settings['limit'],
+                'end-date' => date('Y-m-d', strtotime($settings['end_date'])),
+                'start-date' => date('Y-m-d', strtotime($settings['start_date'])),
+                'ids' => 'ga:' . $settings['ga_profile_id'][$settings['store_id']]
+            );
+        }
 
         $panels = array();
         foreach ($model->getHandlers() as $handler) {
