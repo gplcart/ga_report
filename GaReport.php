@@ -82,11 +82,11 @@ class GaReport extends Module
     }
 
     /**
-     * Implements hook "template.dashboard"
+     * Implements hook "dashboard.panels"
      * @param array $panels 
      * @param \gplcart\core\controllers\backend\Controller $controller
      */
-    public function hookTemplateDashboard(array &$panels, $controller)
+    public function hookDashboardPanels(array &$panels, $controller)
     {
         /* @var $model \gplcart\modules\ga_report\models\Report */
         $model = $this->getInstance('gplcart\\modules\\ga_report\\models\\Report');
