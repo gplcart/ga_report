@@ -13,8 +13,8 @@
         <label class="col-md-2 control-label"><?php echo $this->text('Store'); ?></label>
         <div class="col-md-4">
           <select name="ga[update][store_id]" class="form-control" onchange="$(this).closest('form').submit();">
-            <?php foreach ($stores as $id => $name) { ?>
-            <option value="<?php echo $this->escape($id); ?>"<?php echo $ga_store_id == $id ? ' selected' : ''; ?>><?php echo $this->escape($name); ?></option>
+            <?php foreach ($stores as $id => $store) { ?>
+            <option value="<?php echo $this->escape($id); ?>"<?php echo $ga_store_id == $id ? ' selected' : ''; ?>><?php echo $this->escape($store['name']); ?></option>
             <?php } ?>
           </select>
         </div>

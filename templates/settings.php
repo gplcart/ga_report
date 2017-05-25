@@ -153,9 +153,9 @@
   <div class="panel panel-default">
     <div class="panel-heading"><?php echo $this->text('Google Analytics profiles'); ?></div>
     <div class="panel-body">
-      <?php foreach ($stores as $id => $name) { ?>
+      <?php foreach ($stores as $id => $store) { ?>
       <div class="form-group">
-        <label class="col-md-2 control-label"><?php echo $this->escape($name); ?></label>
+        <label class="col-md-2 control-label"><?php echo $this->escape($store['name']); ?></label>
         <div class="col-md-4">
           <input name="settings[ga_profile_id][<?php echo $this->escape($id); ?>]" class="form-control" value="<?php echo isset($settings['ga_profile_id'][$id]) ? $this->escape($settings['ga_profile_id'][$id]) : ''; ?>">
         </div>

@@ -56,7 +56,7 @@ class Report extends BackendController
 
         $this->clearCacheGaReport($this->ga_report_model, $this);
 
-        $this->setData('stores', $this->store->getNames());
+        $this->setData('stores', $this->store->getList());
         $this->setData('panels', $this->getGaPanelsReport());
 
         $default = $this->config->module('ga_report', 'store_id');

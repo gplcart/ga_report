@@ -64,7 +64,7 @@ class Settings extends BackendController
         $settings = $this->config->module('ga_report');
 
         $this->setData('settings', $settings);
-        $this->setData('stores', $this->store->getNames());
+        $this->setData('stores', $this->store->getList());
         $this->setData('handlers', $this->ga_report_model->getHandlers());
         $this->setData('certificate_file', $settings['certificate_file']);
 
@@ -157,7 +157,6 @@ class Settings extends BackendController
         $this->validateElement('cache', 'regexp', '/^[\d]{1,8}$/');
 
         $this->validateCertificateSettings();
-
         return !$this->hasErrors();
     }
 
