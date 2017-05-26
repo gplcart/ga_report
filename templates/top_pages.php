@@ -9,7 +9,7 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <span class="pull-left">
-      <?php echo $this->escape($report['handler']['name']); ?>
+      <?php echo $this->e($report['handler']['name']); ?>
     </span>
     <span class="small pull-right">
       <?php if (isset($report['updated'])) { ?>
@@ -22,11 +22,11 @@
   </div>
   <div class="panel-body">
     <?php if (isset($report['error'])) { ?>
-    <?php echo $this->escape($report['error']); ?>
+    <?php echo $this->e($report['error']); ?>
     <?php } else if (empty($report['data']['rows'])) { ?>
     <?php echo $this->text('No results'); ?>
     <?php } else { ?>
-    <div data-chart-source="<?php echo $this->json($report['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->escape($report['handler']['id']); ?>">
+    <div data-chart-source="<?php echo $this->json($report['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->e($report['handler']['id']); ?>">
       <table class="table table-condensed table-striped ga-top-pages">
         <thead>
         <th><?php echo $this->text('URL'); ?></th>
@@ -34,7 +34,7 @@
         <tbody>
           <?php foreach ($report['data']['rows'] as $row) { ?>
           <tr>
-            <td><?php echo $this->truncate($this->escape($row[0]), 100); ?></td>
+            <td><?php echo $this->truncate($this->e($row[0]), 100); ?></td>
           </tr>
           <?php } ?>
         </tbody>

@@ -9,7 +9,7 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <span class="pull-left">
-    <?php echo $this->escape($report['handler']['name']); ?>
+    <?php echo $this->e($report['handler']['name']); ?>
     </span>
     <span class="small pull-right">
       <?php if(isset($report['updated'])) { ?>
@@ -22,48 +22,48 @@
   </div>
   <div class="panel-body">
     <?php if (isset($report['error'])) { ?>
-    <?php echo $this->escape($report['error']); ?>
+    <?php echo $this->e($report['error']); ?>
     <?php } else if (empty($report['data']['rows'])) { ?>
     <?php echo $this->text('No results'); ?>
     <?php } else { ?>
-    <div data-chart-source="<?php echo $this->json($report['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->escape($report['handler']['id']); ?>">
+    <div data-chart-source="<?php echo $this->json($report['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->e($report['handler']['id']); ?>">
       <table class="table table-condensed table-striped">
         <tbody>
           <tr>
             <th><?php echo $this->text('Visitors'); ?></th>
-            <td><?php echo $this->escape($report['data']['rows'][0][0]); ?></td>
+            <td><?php echo $this->e($report['data']['rows'][0][0]); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('New visits'); ?></th>
-            <td><?php echo $this->escape($report['data']['rows'][0][1]); ?></td>
+            <td><?php echo $this->e($report['data']['rows'][0][1]); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('New visits'); ?> %</th>
-            <td><?php echo $this->escape(round($report['data']['rows'][0][2], 1)); ?></td>
+            <td><?php echo $this->e(round($report['data']['rows'][0][2], 1)); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('Total visits'); ?></th>
-            <td><?php echo $this->escape($report['data']['rows'][0][3]); ?></td>
+            <td><?php echo $this->e($report['data']['rows'][0][3]); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('Page views'); ?></th>
-            <td><?php echo $this->escape($report['data']['rows'][0][4]); ?></td>
+            <td><?php echo $this->e($report['data']['rows'][0][4]); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('Bounces'); ?></th>
-            <td><?php echo $this->escape($report['data']['rows'][0][5]); ?></td>
+            <td><?php echo $this->e($report['data']['rows'][0][5]); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('Bounce rate'); ?></th>
-            <td><?php echo $this->escape(round($report['data']['rows'][0][6], 1)); ?></td>
+            <td><?php echo $this->e(round($report['data']['rows'][0][6], 1)); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('Time on site'); ?></th>
-            <td><?php echo $this->escape(round($report['data']['rows'][0][7], 1)); ?></td>
+            <td><?php echo $this->e(round($report['data']['rows'][0][7], 1)); ?></td>
           </tr>
           <tr>
             <th><?php echo $this->text('Averate time on site'); ?></th>
-            <td><?php echo $this->escape(round($report['data']['rows'][0][8], 1)); ?></td>
+            <td><?php echo $this->e(round($report['data']['rows'][0][8], 1)); ?></td>
           </tr>
         </tbody>
       </table>

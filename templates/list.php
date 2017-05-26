@@ -14,7 +14,7 @@
         <div class="col-md-4">
           <select name="ga[update][store_id]" class="form-control" onchange="$(this).closest('form').submit();">
             <?php foreach ($stores as $id => $store) { ?>
-            <option value="<?php echo $this->escape($id); ?>"<?php echo $ga_store_id == $id ? ' selected' : ''; ?>><?php echo $this->escape($store['name']); ?></option>
+            <option value="<?php echo $this->e($id); ?>"<?php echo $ga_store_id == $id ? ' selected' : ''; ?>><?php echo $this->e($store['name']); ?></option>
             <?php } ?>
           </select>
         </div>

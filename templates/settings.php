@@ -26,15 +26,15 @@
       <?php if ($certificate_file) { ?>
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
-          <input name="settings[certificate_file]" type="hidden" value="<?php echo $this->escape($certificate_file); ?>">
-          <input type="checkbox" name="delete_certificate" value="1"> <?php echo $this->text('Delete'); ?> <i><?php echo $this->escape($certificate_file); ?></i>
+          <input name="settings[certificate_file]" type="hidden" value="<?php echo $this->e($certificate_file); ?>">
+          <input type="checkbox" name="delete_certificate" value="1"> <?php echo $this->text('Delete'); ?> <i><?php echo $this->e($certificate_file); ?></i>
         </div>
       </div>
       <?php } ?>
       <div class="form-group<?php echo $this->error('certificate_secret', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Certificate secret'); ?></label>
         <div class="col-md-4">
-          <input type="password" name="settings[certificate_secret]" class="form-control" value="<?php echo $this->escape($settings['certificate_secret']); ?>">
+          <input type="password" name="settings[certificate_secret]" class="form-control" value="<?php echo $this->e($settings['certificate_secret']); ?>">
           <div class="help-block">
             <?php echo $this->error('certificate_secret'); ?>
             <div class="text-muted">
@@ -46,7 +46,7 @@
       <div class="form-group<?php echo $this->error('service_account_id', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Service account ID'); ?></label>
         <div class="col-md-4">
-          <input name="settings[service_account_id]" class="form-control" value="<?php echo $this->escape($settings['service_account_id']); ?>">
+          <input name="settings[service_account_id]" class="form-control" value="<?php echo $this->e($settings['service_account_id']); ?>">
           <div class="help-block">
             <?php echo $this->error('service_account_id'); ?>
             <div class="text-muted">
@@ -63,7 +63,7 @@
       <div class="form-group<?php echo $this->error('limit', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Limit'); ?></label>
         <div class="col-md-4">
-          <input name="settings[limit]" class="form-control" value="<?php echo $this->escape($settings['limit']); ?>">
+          <input name="settings[limit]" class="form-control" value="<?php echo $this->e($settings['limit']); ?>">
           <div class="help-block">
             <?php echo $this->error('limit'); ?>
             <div class="text-muted">
@@ -75,7 +75,7 @@
       <div class="form-group<?php echo $this->error('start_date', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Start date'); ?></label>
         <div class="col-md-4">
-          <input name="settings[start_date]" class="form-control" value="<?php echo $this->escape($settings['start_date']); ?>">
+          <input name="settings[start_date]" class="form-control" value="<?php echo $this->e($settings['start_date']); ?>">
           <div class="help-block">
             <?php echo $this->error('start_date'); ?>
             <div class="text-muted">
@@ -88,7 +88,7 @@
       <div class="form-group<?php echo $this->error('end_date', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('End date'); ?></label>
         <div class="col-md-4">
-          <input name="settings[end_date]" class="form-control" value="<?php echo $this->escape($settings['end_date']); ?>">
+          <input name="settings[end_date]" class="form-control" value="<?php echo $this->e($settings['end_date']); ?>">
           <div class="help-block">
             <?php echo $this->error('end_date'); ?>
             <div class="text-muted">
@@ -106,7 +106,7 @@
       <div class="form-group<?php echo $this->error('cache', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Cache lifespan'); ?></label>
         <div class="col-md-4">
-          <input name="settings[cache]" class="form-control" value="<?php echo $this->escape($settings['cache']); ?>">
+          <input name="settings[cache]" class="form-control" value="<?php echo $this->e($settings['cache']); ?>">
           <div class="help-block">
             <?php echo $this->error('cache'); ?>
             <div class="text-muted">
@@ -130,7 +130,7 @@
         <div class="col-md-4">
           <select name="settings[store_id]" class="form-control">
             <?php foreach ($stores as $id => $name) { ?>
-              <option value="<?php echo $this->escape($id); ?>"<?php echo $settings['store_id'] == $id ? ' selected' : ''; ?>><?php echo $this->escape($name); ?></option>
+              <option value="<?php echo $this->e($id); ?>"<?php echo $settings['store_id'] == $id ? ' selected' : ''; ?>><?php echo $this->e($name); ?></option>
             <?php } ?>
           </select>
           <div class="help-block"><?php echo $this->text('Show by default reports for the selected store'); ?></div>
@@ -142,7 +142,7 @@
           <?php foreach ($handlers as $handler) { ?>
           <div class="checkbox">
             <label>
-              <input type="checkbox" name="settings[dashboard][]" value="<?php echo $this->escape($handler['id']); ?>"<?php echo in_array($handler['id'], $settings['dashboard']) ? ' checked' : ''; ?>> <?php echo $this->escape($handler['name']); ?>
+              <input type="checkbox" name="settings[dashboard][]" value="<?php echo $this->e($handler['id']); ?>"<?php echo in_array($handler['id'], $settings['dashboard']) ? ' checked' : ''; ?>> <?php echo $this->e($handler['name']); ?>
             </label>
           </div>
           <?php } ?>
@@ -155,9 +155,9 @@
     <div class="panel-body">
       <?php foreach ($stores as $id => $store) { ?>
       <div class="form-group">
-        <label class="col-md-2 control-label"><?php echo $this->escape($store['name']); ?></label>
+        <label class="col-md-2 control-label"><?php echo $this->e($store['name']); ?></label>
         <div class="col-md-4">
-          <input name="settings[ga_profile_id][<?php echo $this->escape($id); ?>]" class="form-control" value="<?php echo isset($settings['ga_profile_id'][$id]) ? $this->escape($settings['ga_profile_id'][$id]) : ''; ?>">
+          <input name="settings[ga_profile_id][<?php echo $this->e($id); ?>]" class="form-control" value="<?php echo isset($settings['ga_profile_id'][$id]) ? $this->e($settings['ga_profile_id'][$id]) : ''; ?>">
         </div>
       </div>
       <?php } ?>
