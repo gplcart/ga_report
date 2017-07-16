@@ -60,7 +60,7 @@ class Report extends BackendController
         $this->setData('panels', $this->getGaPanelsReport());
 
         $default = $this->config->module('ga_report', 'store_id');
-        $store_id = $this->getQuery('ga.update.store_id', $default);
+        $store_id = $this->getQuery('ga.update.store_id', $default, 'string');
         $this->setData('ga_store_id', $store_id);
 
         $this->outputListReport();

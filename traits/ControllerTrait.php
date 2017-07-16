@@ -21,7 +21,7 @@ trait ControllerTrait
      */
     protected function getPanelsGaReport(array $settings, $model, $controller)
     {
-        $store_id = $controller->getQuery('ga.update.store_id');
+        $store_id = $controller->getQuery('ga.update.store_id', '', 'string');
 
         if (isset($store_id)) {
             $settings['store_id'] = $store_id;
@@ -58,8 +58,8 @@ trait ControllerTrait
     protected function clearCacheGaReport($model, $controller)
     {
         if ($controller->isQuery('ga.update')) {
-            $store_id = $controller->getQuery('ga.update.store_id');
-            $handler_id = $controller->getQuery('ga.update.handler_id');
+            $store_id = $controller->getQuery('ga.update.store_id', '', 'string');
+            $handler_id = $controller->getQuery('ga.update.handler_id', '', 'string');
             $model->clearCache($handler_id, $store_id);
         }
     }
