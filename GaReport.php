@@ -17,8 +17,6 @@ use gplcart\core\Module;
 class GaReport extends Module
 {
 
-    use \gplcart\modules\ga_report\traits\ControllerTrait;
-
     /**
      * Constructor
      */
@@ -33,7 +31,6 @@ class GaReport extends Module
      */
     public function hookRouteList(array &$routes)
     {
-        // Module settings page
         $routes['admin/module/settings/ga_report'] = array(
             'access' => 'module_edit',
             'handlers' => array(
@@ -41,7 +38,6 @@ class GaReport extends Module
             )
         );
 
-        // Google Analytics reports
         $routes['admin/report/ga'] = array(
             'menu' => array('admin' => 'Google Analytics'),
             'access' => 'ga_report',
@@ -82,27 +78,54 @@ class GaReport extends Module
     }
 
     /**
-     * Implements hook "dashboard.panels"
-     * @param array $panels 
+     * Implements hook "dashboard.handlers"
+     * @param array $handlers 
+     */
+    public function hookDashboardHandlers(array &$handlers)
+    {
+        $settings = $this->config->module('ga_report');
+
+        /* @var $ga_model \gplcart\modules\ga_report\models\Report */
+        $ga_model = $this->getInstance('gplcart\\modules\\ga_report\\models\\Report');
+
+        $weight = count($handlers);
+
+        foreach ($ga_model->getHandlers() as $id => $ga_handler) {
+
+            if (!in_array($id, $settings['dashboard'])) {
+                continue;
+            }
+
+            $weight++;
+
+            $handlers["ga_{$ga_handler['id']}"] = array(
+                'status' => true,
+                'weight' => $weight,
+                'title' => $ga_handler['name'],
+                'template' => $ga_handler['template'],
+                'handlers' => array(
+                    'data' => function() use ($ga_handler, $ga_model, $settings) {
+                        return array('report' => $ga_model->get($ga_handler['id'], $settings), 'settings' => $settings);
+                    }
+                )
+            );
+        }
+    }
+
+    /**
+     * Implements hook "construct.controller.backend"
      * @param \gplcart\core\controllers\backend\Controller $controller
      */
-    public function hookDashboardPanels(array &$panels, $controller)
+    public function hookConstructControllerBackend($controller)
     {
-        /* @var $model \gplcart\modules\ga_report\models\Report */
-        $model = $this->getInstance('gplcart\\modules\\ga_report\\models\\Report');
+        if ($controller->isQuery('ga.update')) {
 
-        $this->clearCacheGaReport($model, $controller);
+            /* @var $ga_model \gplcart\modules\ga_report\models\Report */
+            $ga_model = $this->getInstance('gplcart\\modules\\ga_report\\models\\Report');
 
-        $settings = $this->config->module('ga_report');
-        $ga_panels = $this->getPanelsGaReport($settings, $model, $controller);
-
-        $weight = count($panels);
-        foreach ($ga_panels as $id => $panel) {
-            if (in_array($id, $settings['dashboard']) && $controller->access('ga_report')) {
-                $panel['weight'] = $weight;
-                $panels[$id] = $panel;
-                $weight++;
-            }
+            $store_id = $controller->getQuery('ga.update.store_id', '', 'string');
+            $handler_id = $controller->getQuery('ga.update.handler_id', '', 'string');
+            $ga_model->clearCache($handler_id, $store_id);
         }
     }
 

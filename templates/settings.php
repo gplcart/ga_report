@@ -129,8 +129,8 @@
         <label class="col-md-2 control-label"><?php echo $this->text('Default store'); ?></label>
         <div class="col-md-4">
           <select name="settings[store_id]" class="form-control">
-            <?php foreach ($stores as $id => $name) { ?>
-              <option value="<?php echo $this->e($id); ?>"<?php echo $settings['store_id'] == $id ? ' selected' : ''; ?>><?php echo $this->e($name); ?></option>
+            <?php foreach ($stores as $id => $store) { ?>
+              <option value="<?php echo $this->e($id); ?>"<?php echo $settings['store_id'] == $id ? ' selected' : ''; ?>><?php echo $this->e($store['name']); ?></option>
             <?php } ?>
           </select>
           <div class="help-block"><?php echo $this->text('Show by default reports for the selected store'); ?></div>

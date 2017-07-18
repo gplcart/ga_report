@@ -157,7 +157,7 @@ class Report extends Model
         );
 
         foreach ($handlers as $id => &$handler) {
-            $handler += array('template' => "ga_report|$id");
+            $handler += array('template' => "ga_report|panels/$id");
             $handler['query'] += $default;
             $handler['id'] = $id;
         }

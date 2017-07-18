@@ -87,12 +87,7 @@ class Settings extends BackendController
      */
     protected function setBreadcrumbEditSettings()
     {
-        $breadcrumbs = array();
-
-        $breadcrumbs[] = array(
-            'text' => $this->text('Dashboard'),
-            'url' => $this->url('admin')
-        );
+        $this->setBreadcrumbBackend();
 
         $breadcrumbs[] = array(
             'text' => $this->text('Modules'),

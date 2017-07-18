@@ -19,8 +19,6 @@ use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
 class Report extends BackendController
 {
 
-    use \gplcart\modules\ga_report\traits\ControllerTrait;
-
     /**
      * Google Analytics Report Report model instance
      * @var \gplcart\modules\ga_report\models\Report $ga_report_model
@@ -54,10 +52,10 @@ class Report extends BackendController
         $this->setTitleListReport();
         $this->setBreadcrumbListReport();
 
-        $this->clearCacheGaReport($this->ga_report_model, $this);
+        $this->clearCacheReport();
 
         $this->setData('stores', $this->store->getList());
-        $this->setData('panels', $this->getGaPanelsReport());
+        $this->setData('panels', $this->getPanelsReport());
 
         $default = $this->config->module('ga_report', 'store_id');
         $store_id = $this->getQuery('ga.update.store_id', $default, 'string');
@@ -67,13 +65,51 @@ class Report extends BackendController
     }
 
     /**
+     * Clear GA cache
+     */
+    protected function clearCacheReport()
+    {
+        if ($this->isQuery('ga.update')) {
+            $store_id = $this->getQuery('ga.update.store_id', '', 'string');
+            $handler_id = $this->getQuery('ga.update.handler_id', '', 'string');
+            $this->ga_report_model->clearCache($handler_id, $store_id);
+        }
+    }
+
+    /**
      * Returns an array of Google Analytics panels
      * @return array
      */
-    protected function getGaPanelsReport()
+    protected function getPanelsReport()
     {
         $settings = $this->config->module('ga_report');
-        $panels = $this->getPanelsGaReport($settings, $this->ga_report_model, $this);
+        $store_id = $this->getQuery('ga.update.store_id', '', 'string');
+
+        if (isset($store_id)) {
+            $settings['store_id'] = $store_id;
+        }
+
+        if (empty($settings['ga_profile_id'][$settings['store_id']])) {
+            $settings['query'] = array();
+        } else {
+            $settings['query'] = array(
+                'max-results' => $settings['limit'],
+                'end-date' => date('Y-m-d', strtotime($settings['end_date'])),
+                'start-date' => date('Y-m-d', strtotime($settings['start_date'])),
+                'ids' => 'ga:' . $settings['ga_profile_id'][$settings['store_id']]
+            );
+        }
+
+        $panels = array();
+        foreach ($this->ga_report_model->getHandlers() as $handler) {
+            $report = $this->ga_report_model->get($handler['id'], $settings);
+            if (isset($report['handler']['template'])) {
+                // Place data under "content => data" kaey to make compatible with dashboard templates
+                $data = array('content' => array('data' => array('report' => $report, 'settings' => $settings)));
+                $panels[$handler['id']] = array('rendered' => $this->render($report['handler']['template'], $data));
+            }
+        }
+
         return gplcart_array_split($panels, 3);
     }
 
@@ -90,12 +126,7 @@ class Report extends BackendController
      */
     protected function setBreadcrumbListReport()
     {
-        $breadcrumb = array(
-            'text' => $this->text('Dashboard'),
-            'url' => $this->url('admin')
-        );
-
-        $this->setBreadcrumb($breadcrumb);
+        $this->setBreadcrumbBackend();
     }
 
     /**
