@@ -37,7 +37,12 @@ class Api
      */
     public function process(array $params, $provider)
     {
-        $result = $this->curl->get($provider['url']['process'], array('query' => $params));
+        try {
+            $result = $this->curl->get($provider['url']['process'], array('query' => $params));
+        } catch (\Exception $ex) {
+            return array();
+        }
+        
         return json_decode($result, true);
     }
 

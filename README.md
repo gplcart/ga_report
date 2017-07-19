@@ -30,6 +30,10 @@ All reports are displayed in plain tables, but you can install the [Chart module
 
 NOTE: In order to use this module you have to get `Service Account Key` from [Google API console](https://console.developers.google.com/apis/credentials)
 
+**Requirements:**
+
+- CURL
+
 
 **Installation**
 
