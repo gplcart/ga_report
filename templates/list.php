@@ -6,22 +6,18 @@
  * @license https://www.gnu.org/licenses/gpl-3.0.en.html GPL-3.0+
  */
 ?>
-<div class="panel panel-default">
-  <div class="panel-body">
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-md-2 control-label"><?php echo $this->text('Store'); ?></label>
-        <div class="col-md-4">
-          <select name="ga[update][store_id]" class="form-control" onchange="$(this).closest('form').submit();">
-            <?php foreach ($stores as $id => $store) { ?>
-            <option value="<?php echo $this->e($id); ?>"<?php echo $ga_store_id == $id ? ' selected' : ''; ?>><?php echo $this->e($store['name']); ?></option>
-            <?php } ?>
-          </select>
-        </div>
-      </div>
-    </form>
+<form class="form-horizontal">
+  <div class="form-group">
+    <label class="col-md-2 control-label"><?php echo $this->text('Store'); ?></label>
+    <div class="col-md-4">
+      <select name="ga[update][store_id]" class="form-control" onchange="$(this).closest('form').submit();">
+        <?php foreach ($stores as $id => $store) { ?>
+        <option value="<?php echo $this->e($id); ?>"<?php echo $ga_store_id == $id ? ' selected' : ''; ?>><?php echo $this->e($store['name']); ?></option>
+        <?php } ?>
+      </select>
+    </div>
   </div>
-</div>
+</form>
 <div class="row">
   <?php foreach ($panels as $columns) { ?>
   <div class="col-md-4">
