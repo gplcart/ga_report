@@ -96,7 +96,7 @@ class GaReport extends Module
         $settings = $this->config->module('ga_report');
 
         /* @var $ga_model \gplcart\modules\ga_report\models\Report */
-        $ga_model = $this->getInstance('gplcart\\modules\\ga_report\\models\\Report');
+        $ga_model = $this->getModel('Report', 'ga_report');
 
         $weight = count($handlers);
 
@@ -131,7 +131,7 @@ class GaReport extends Module
         if ($controller->isQuery('ga.update')) {
 
             /* @var $ga_model \gplcart\modules\ga_report\models\Report */
-            $ga_model = $this->getInstance('gplcart\\modules\\ga_report\\models\\Report');
+            $ga_model = $this->getModel('Report', 'ga_report');
 
             $store_id = $controller->getQuery('ga.update.store_id', '', 'string');
             $handler_id = $controller->getQuery('ga.update.handler_id', '', 'string');
