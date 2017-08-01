@@ -162,7 +162,7 @@ class Report extends Model
             $handler['id'] = $id;
         }
 
-        $this->hook->fire('module.ga.report.handlers', $handlers);
+        $this->hook->attach('module.ga.report.handlers', $handlers);
         return $handlers;
     }
 
