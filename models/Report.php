@@ -13,7 +13,7 @@ use gplcart\core\Model,
     gplcart\core\Cache;
 use gplcart\core\models\Oauth as OauthModel,
     gplcart\core\models\Language as LanguageModel;
-use gplcart\core\exceptions\OauthAuthorizationException;
+use gplcart\core\exceptions\OauthAuthorization as OauthAuthorizationException;
 
 /**
  * Manages basic behaviors and data related to Google Analytics Report
