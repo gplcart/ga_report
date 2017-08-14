@@ -126,7 +126,7 @@ class Report extends BackendController
      */
     protected function setBreadcrumbListReport()
     {
-        $this->setBreadcrumbBackend();
+        $this->setBreadcrumbHome();
     }
 
     /**
