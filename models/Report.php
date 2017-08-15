@@ -143,7 +143,7 @@ class Report extends Model
      */
     public function getHandlers()
     {
-        $handlers = &Cache::memory(__METHOD__);
+        $handlers = &gplcart_static(__METHOD__);
 
         if (isset($handlers)) {
             return $handlers;
