@@ -89,18 +89,15 @@ class GaReport extends Module
 
     /**
      * Implements hook "dashboard.handlers"
-     * @param array $handlers 
+     * @param array $handlers
      */
     public function hookDashboardHandlers(array &$handlers)
     {
+        $weight = count($handlers);
+        $model = $this->getReportModel();
         $settings = $this->config->module('ga_report');
 
-        /* @var $ga_model \gplcart\modules\ga_report\models\Report */
-        $ga_model = $this->getModel('Report', 'ga_report');
-
-        $weight = count($handlers);
-
-        foreach ($ga_model->getHandlers() as $id => $ga_handler) {
+        foreach ($model->getHandlers() as $id => $handler) {
 
             if (!in_array($id, $settings['dashboard'])) {
                 continue;
@@ -108,14 +105,16 @@ class GaReport extends Module
 
             $weight++;
 
-            $handlers["ga_{$ga_handler['id']}"] = array(
+            $report = $model->get($id, $settings);
+
+            $handlers["ga_$id"] = array(
                 'status' => true,
                 'weight' => $weight,
-                'title' => $ga_handler['name'],
-                'template' => $ga_handler['template'],
+                'title' => $handler['name'],
+                'template' => $handler['template'],
                 'handlers' => array(
-                    'data' => function() use ($ga_handler, $ga_model, $settings) {
-                        return array('report' => $ga_model->get($ga_handler['id'], $settings), 'settings' => $settings);
+                    'data' => function() use ($report, $settings) {
+                        return array('report' => $report, 'settings' => $settings);
                     }
                 )
             );
@@ -129,14 +128,28 @@ class GaReport extends Module
     public function hookConstructControllerBackend($controller)
     {
         if ($controller->isQuery('ga.update')) {
-
-            /* @var $ga_model \gplcart\modules\ga_report\models\Report */
-            $ga_model = $this->getModel('Report', 'ga_report');
-
             $store_id = $controller->getQuery('ga.update.store_id', '', 'string');
             $handler_id = $controller->getQuery('ga.update.handler_id', '', 'string');
-            $ga_model->clearCache($handler_id, $store_id);
+            $this->getReportModel()->clearCache($handler_id, $store_id);
         }
+    }
+
+    /**
+     * Returns the report model instance
+     * @return \gplcart\modules\ga_report\models\Report
+     */
+    protected function getReportModel()
+    {
+        return $this->getModel('Report', 'ga_report');
+    }
+
+    /**
+     * Returns an array of GA handlers
+     * @return array
+     */
+    public function getHandlers()
+    {
+        return $this->getReportModel()->getHandlers();
     }
 
 }
