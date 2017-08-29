@@ -128,8 +128,8 @@ class GaReport extends Module
     public function hookConstructControllerBackend($controller)
     {
         if ($controller->isQuery('ga.update')) {
-            $store_id = $controller->getQuery('ga.update.store_id', '', 'string');
-            $handler_id = $controller->getQuery('ga.update.handler_id', '', 'string');
+            $store_id = $controller->getQuery('ga.update.store_id', '');
+            $handler_id = $controller->getQuery('ga.update.handler_id', '');
             $this->getReportModel()->clearCache($handler_id, $store_id);
         }
     }

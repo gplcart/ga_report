@@ -58,7 +58,7 @@ class Report extends BackendController
         $this->setData('panels', $this->getPanelsReport());
 
         $default = $this->config->module('ga_report', 'store_id');
-        $store_id = $this->getQuery('ga.update.store_id', $default, 'string');
+        $store_id = $this->getQuery('ga.update.store_id', $default);
         $this->setData('ga_store_id', $store_id);
 
         $this->outputListReport();
@@ -70,8 +70,8 @@ class Report extends BackendController
     protected function clearCacheReport()
     {
         if ($this->isQuery('ga.update')) {
-            $store_id = $this->getQuery('ga.update.store_id', '', 'string');
-            $handler_id = $this->getQuery('ga.update.handler_id', '', 'string');
+            $store_id = $this->getQuery('ga.update.store_id', '');
+            $handler_id = $this->getQuery('ga.update.handler_id', '');
             $this->ga_report_model->clearCache($handler_id, $store_id);
         }
     }
@@ -83,7 +83,7 @@ class Report extends BackendController
     protected function getPanelsReport()
     {
         $settings = $this->config->module('ga_report');
-        $store_id = $this->getQuery('ga.update.store_id', '', 'string');
+        $store_id = $this->getQuery('ga.update.store_id', '');
 
         if (isset($store_id)) {
             $settings['store_id'] = $store_id;
