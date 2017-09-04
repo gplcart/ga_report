@@ -33,9 +33,11 @@ class Api
 
     /**
      * Performs request to get API data
+     * @param array $params
+     * @param array $provider
      * @return array
      */
-    public function process(array $params, $provider)
+    public function process(array $params, array $provider)
     {
         try {
             $result = $this->curl->get($provider['url']['process'], array('query' => $params));

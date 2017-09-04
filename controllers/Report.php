@@ -104,7 +104,6 @@ class Report extends BackendController
         foreach ($this->ga_report_model->getHandlers() as $handler) {
             $report = $this->ga_report_model->get($handler['id'], $settings);
             if (isset($report['handler']['template'])) {
-                // Place data under "content => data" kaey to make compatible with dashboard templates
                 $data = array('content' => array('data' => array('report' => $report, 'settings' => $settings)));
                 $panels[$handler['id']] = array('rendered' => $this->render($report['handler']['template'], $data));
             }
