@@ -10,7 +10,7 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <span class="pull-left">
-    <?php echo $this->e($content['data']['report']['handler']['name']); ?>
+        <?php echo $this->e($content['data']['report']['handler']['name']); ?>
     </span>
     <span class="small pull-right">
       <?php if(isset($content['data']['report']['updated'])) { ?>
@@ -27,11 +27,13 @@
     <?php } else if (empty($content['data']['report']['data']['rows'])) { ?>
     <?php echo $this->text('No results'); ?>
     <?php } else { ?>
-    <div data-chart-source="<?php echo $this->json($content['data']['report']['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->e($content['data']['report']['handler']['id']); ?>">
+        <div data-chart-source="<?php echo $this->json($content['data']['report']['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->e($content['data']['report']['handler']['id']); ?>">
       <table class="table table-condensed table-striped">
         <thead>
-        <th><?php echo $this->text('Screen resolution'); ?></th>
-        <th><?php echo $this->text('Visits'); ?></th>
+          <tr>
+            <th><?php echo $this->text('Screen resolution'); ?></th>
+            <th><?php echo $this->text('Visits'); ?></th>
+          </tr>
         </thead>
         <tbody>
           <?php foreach ($content['data']['report']['data']['rows'] as $row) { ?>
