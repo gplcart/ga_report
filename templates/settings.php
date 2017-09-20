@@ -17,7 +17,7 @@
         <div class="help-block">
           <?php echo $this->error('file'); ?>
           <div class="text-muted">
-            <?php echo $this->text('A .p12 certificate file you got from <a href="@url">Google API Console</a>', array('@url' => 'https://console.developers.google.com/apis/credentials/serviceaccountkey')); ?>
+            <?php echo $this->text('Specify a .p12 certificate file you got from <a href="@url">Google API Console</a>', array('@url' => 'https://console.developers.google.com/apis/credentials/serviceaccountkey')); ?>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
         <div class="help-block">
           <?php echo $this->error('certificate_secret'); ?>
           <div class="text-muted">
-            <?php echo $this->text('A secret word for the certificate file. If empty, default "notasecret" will be used'); ?>
+            <?php echo $this->text('Secret word for the certificate file. If empty, default "notasecret" will be used'); ?>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
         <div class="help-block">
           <?php echo $this->error('service_account_id'); ?>
           <div class="text-muted">
-            <?php echo $this->text('A service account ID associated with the credentials'); ?>
+            <?php echo $this->text('Service account ID associated with the credentials'); ?>
           </div>
         </div>
       </div>

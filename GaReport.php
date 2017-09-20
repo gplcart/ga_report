@@ -50,7 +50,7 @@ class GaReport extends Module
         );
 
         $routes['admin/report/ga'] = array(
-            'menu' => array('admin' => 'Google Analytics'),
+            'menu' => array('admin' => /* @text */'Google Analytics'),
             'access' => 'ga_report',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\ga_report\\controllers\\Report', 'listReport')
@@ -64,7 +64,7 @@ class GaReport extends Module
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['ga_report'] = 'Google Analytics reports: access';
+        $permissions['ga_report'] = /* @text */'Google Analytics Report: access';
     }
 
     /**
@@ -74,7 +74,7 @@ class GaReport extends Module
     public function hookOauthProviders(array &$providers)
     {
         $providers['ga'] = array(
-            'name' => 'Google analytics',
+            'name' => /* @text */'Google Analytics',
             'settings' => $this->config->module('ga_report'),
             'url' => array(
                 'process' => 'https://www.googleapis.com/analytics/v3/data/ga',

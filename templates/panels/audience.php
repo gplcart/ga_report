@@ -63,7 +63,7 @@
             <td><?php echo $this->e(round($content['data']['report']['data']['rows'][0][7], 1)); ?></td>
           </tr>
           <tr>
-            <th><?php echo $this->text('Averate time on site'); ?></th>
+            <th><?php echo $this->text('Average time on site'); ?></th>
             <td><?php echo $this->e(round($content['data']['report']['data']['rows'][0][8], 1)); ?></td>
           </tr>
         </tbody>
