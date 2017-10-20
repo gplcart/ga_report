@@ -168,7 +168,7 @@ class Settings extends BackendController
 
         $this->validateElement('certificate_secret', 'required');
 
-        $result = $this->file->upload($upload, false, GC_PRIVATE_MODULE_DIR . '/google-analytics');
+        $result = $this->file->upload($upload, false, gplcart_file_private_module('ga_report'));
 
         if ($result !== true) {
             $this->setError('file', $result);
