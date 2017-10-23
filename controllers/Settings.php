@@ -132,7 +132,7 @@ class Settings extends BackendController
      */
     protected function deleteCertificateSettings()
     {
-        $file = GC_PRIVATE_MODULE_DIR . '/' . $this->config->module('ga_report', 'certificate_file');
+        $file = GC_DIR_PRIVATE_MODULE . '/' . $this->config->module('ga_report', 'certificate_file');
 
         if (file_exists($file) && unlink($file)) {
             $this->setMessage($this->text('Certificate has been deleted from the server'), 'success', true);
