@@ -141,7 +141,9 @@ class GaReport extends Module
      */
     protected function getReportModel()
     {
-        return $this->getModel('Report', 'ga_report');
+        /* @var $model \gplcart\modules\ga_report\models\Report */
+        $model = $this->getModel('Report', 'ga_report');
+        return $model;
     }
 
     /**
