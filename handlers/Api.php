@@ -41,11 +41,11 @@ class Api
     {
         try {
             $result = $this->curl->get($provider['url']['process'], array('query' => $params));
+            return json_decode($result, true);
         } catch (\Exception $ex) {
+            trigger_error($ex->getMessage());
             return array();
         }
-        
-        return json_decode($result, true);
     }
 
 }
