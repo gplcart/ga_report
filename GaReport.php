@@ -9,7 +9,8 @@
 
 namespace gplcart\modules\ga_report;
 
-use gplcart\core\Module;
+use gplcart\core\Module,
+    gplcart\core\Config;
 
 /**
  * Main class for Google Analytics Report module
@@ -18,11 +19,11 @@ class GaReport extends Module
 {
 
     /**
-     * Constructor
+     * @param Config $config
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /**
@@ -75,7 +76,7 @@ class GaReport extends Module
     {
         $providers['ga'] = array(
             'name' => /* @text */'Google Analytics',
-            'settings' => $this->config->module('ga_report'),
+            'settings' => $this->config->getFromModule('ga_report'),
             'url' => array(
                 'process' => 'https://www.googleapis.com/analytics/v3/data/ga',
                 'token' => 'https://www.googleapis.com/oauth2/v4/token'
@@ -96,7 +97,7 @@ class GaReport extends Module
     {
         $weight = count($handlers);
         $model = $this->getReportModel();
-        $settings = $this->config->module('ga_report');
+        $settings = $this->config->getFromModule('ga_report');
 
         foreach ($model->getHandlers() as $id => $handler) {
 

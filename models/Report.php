@@ -9,8 +9,8 @@
 
 namespace gplcart\modules\ga_report\models;
 
-use gplcart\core\Model,
-    gplcart\core\Cache;
+use gplcart\core\Cache,
+    gplcart\core\Hook;
 use gplcart\core\models\Oauth as OauthModel,
     gplcart\core\models\Language as LanguageModel;
 use gplcart\core\exceptions\OauthAuthorization as OauthAuthorizationException;
@@ -18,8 +18,14 @@ use gplcart\core\exceptions\OauthAuthorization as OauthAuthorizationException;
 /**
  * Manages basic behaviors and data related to Google Analytics Report
  */
-class Report extends Model
+class Report
 {
+
+    /**
+     * Hook class instance
+     * @var \gplcart\core\Hook $hook
+     */
+    protected $hook;
 
     /**
      * Language model instance
@@ -40,15 +46,14 @@ class Report extends Model
     protected $cache;
 
     /**
+     * @param Hook $hook
      * @param Cache $cache
      * @param OauthModel $oauth
      * @param LanguageModel $language
      */
-    public function __construct(Cache $cache, OauthModel $oauth,
-            LanguageModel $language)
+    public function __construct(Hook $hook, Cache $cache, OauthModel $oauth, LanguageModel $language)
     {
-        parent::__construct();
-
+        $this->hook = $hook;
         $this->cache = $cache;
         $this->oauth = $oauth;
         $this->language = $language;
