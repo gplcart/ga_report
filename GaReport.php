@@ -137,6 +137,15 @@ class GaReport extends Module
     }
 
     /**
+     * Returns an array of GA handlers
+     * @return array
+     */
+    public function getHandlers()
+    {
+        return $this->getReportModel()->getHandlers();
+    }
+
+    /**
      * Returns the report model instance
      * @return \gplcart\modules\ga_report\models\Report
      */
@@ -145,15 +154,6 @@ class GaReport extends Module
         /* @var $model \gplcart\modules\ga_report\models\Report */
         $model = $this->getModel('Report', 'ga_report');
         return $model;
-    }
-
-    /**
-     * Returns an array of GA handlers
-     * @return array
-     */
-    public function getHandlers()
-    {
-        return $this->getReportModel()->getHandlers();
     }
 
 }
