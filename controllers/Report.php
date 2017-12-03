@@ -35,8 +35,7 @@ class Report extends BackendController
      * @param OauthModel $oauth
      * @param GaReportModuleReportModel $model
      */
-    public function __construct(OauthModel $oauth,
-            GaReportModuleReportModel $model)
+    public function __construct(OauthModel $oauth, GaReportModuleReportModel $model)
     {
         parent::__construct();
 
@@ -125,7 +124,12 @@ class Report extends BackendController
      */
     protected function setBreadcrumbListReport()
     {
-        $this->setBreadcrumbHome();
+        $breadcrumb = array(
+            'url' => $this->url('admin'),
+            'text' => $this->text('Dashboard')
+        );
+
+        $this->setBreadcrumb($breadcrumb);
     }
 
     /**

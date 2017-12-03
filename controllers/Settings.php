@@ -87,7 +87,12 @@ class Settings extends BackendController
      */
     protected function setBreadcrumbEditSettings()
     {
-        $this->setBreadcrumbHome();
+        $breadcrumbs = array();
+
+        $breadcrumbs[] = array(
+            'url' => $this->url('admin'),
+            'text' => $this->text('Dashboard')
+        );
 
         $breadcrumbs[] = array(
             'text' => $this->text('Modules'),
@@ -104,16 +109,9 @@ class Settings extends BackendController
     {
         if ($this->isPosted('clear_cache')) {
             $this->deleteCacheSettings();
-            return null;
-        }
-
-        $this->setSubmitted('settings');
-
-        if ($this->isPosted('delete_certificate')) {
+        } else if ($this->isPosted('delete_certificate')) {
             $this->deleteCertificateSettings();
-        }
-
-        if ($this->isPosted('save') && $this->validateSettings()) {
+        } else if ($this->isPosted('save') && $this->validateSettings()) {
             $this->updateSettings();
         }
     }
@@ -146,12 +144,15 @@ class Settings extends BackendController
      */
     protected function validateSettings()
     {
+        $this->setSubmitted('settings');
+
         $this->validateElement('end_date', 'dateformat');
         $this->validateElement('start_date', 'dateformat');
         $this->validateElement('limit', 'regexp', '/^[\d]{1,3}$/');
         $this->validateElement('cache', 'regexp', '/^[\d]{1,8}$/');
 
         $this->validateCertificateSettings();
+
         return !$this->hasErrors();
     }
 
