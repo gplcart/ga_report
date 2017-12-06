@@ -56,7 +56,7 @@ class Report extends BackendController
         $this->setData('stores', $this->store->getList());
         $this->setData('panels', $this->getPanelsReport());
 
-        $default = $this->config->getFromModule('ga_report', 'store_id');
+        $default = $this->module->getSettings('ga_report', 'store_id');
         $store_id = $this->getQuery('ga.update.store_id', $default);
         $this->setData('ga_store_id', $store_id);
 
@@ -81,7 +81,7 @@ class Report extends BackendController
      */
     protected function getPanelsReport()
     {
-        $settings = $this->config->getFromModule('ga_report');
+        $settings = $this->module->getSettings('ga_report');
         $store_id = $this->getQuery('ga.update.store_id', '');
 
         if (isset($store_id)) {

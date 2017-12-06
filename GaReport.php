@@ -10,31 +10,26 @@
 namespace gplcart\modules\ga_report;
 
 use gplcart\core\Module,
-    gplcart\core\Config;
+    gplcart\core\Container;
 
 /**
  * Main class for Google Analytics Report module
  */
-class GaReport extends Module
+class GaReport
 {
 
     /**
-     * @param Config $config
+     * Model class instance
+     * @var \gplcart\core\Model $model
      */
-    public function __construct(Config $config)
-    {
-        parent::__construct($config);
-    }
+    protected $module;
 
     /**
-     * Implements hook "module.install.before"
-     * @param null|string $result
+     * @param Module $module
      */
-    public function hookModuleInstallBefore(&$result)
+    public function __construct(Module $module)
     {
-        if (!function_exists('curl_init')) {
-            $result = $this->getLanguage()->text('CURL library is not enabled');
-        }
+        $this->module = $module;
     }
 
     /**
@@ -76,7 +71,7 @@ class GaReport extends Module
     {
         $providers['ga'] = array(
             'name' => /* @text */'Google Analytics',
-            'settings' => $this->config->getFromModule('ga_report'),
+            'settings' => $this->module->getSettings('ga_report'),
             'url' => array(
                 'process' => 'https://www.googleapis.com/analytics/v3/data/ga',
                 'token' => 'https://www.googleapis.com/oauth2/v4/token'
@@ -96,8 +91,8 @@ class GaReport extends Module
     public function hookDashboardHandlers(array &$handlers)
     {
         $weight = count($handlers);
-        $model = $this->getReportModel();
-        $settings = $this->config->getFromModule('ga_report');
+        $model = $this->getModel();
+        $settings = $this->module->getSettings('ga_report');
 
         foreach ($model->getHandlers() as $id => $handler) {
 
@@ -132,7 +127,7 @@ class GaReport extends Module
         if ($controller->isQuery('ga.update')) {
             $store_id = $controller->getQuery('ga.update.store_id', '');
             $handler_id = $controller->getQuery('ga.update.handler_id', '');
-            $this->getReportModel()->clearCache($handler_id, $store_id);
+            $this->getModel()->clearCache($handler_id, $store_id);
         }
     }
 
@@ -142,18 +137,16 @@ class GaReport extends Module
      */
     public function getHandlers()
     {
-        return $this->getReportModel()->getHandlers();
+        return $this->getModel()->getHandlers();
     }
 
     /**
      * Returns the report model instance
      * @return \gplcart\modules\ga_report\models\Report
      */
-    protected function getReportModel()
+    protected function getModel()
     {
-        /* @var $model \gplcart\modules\ga_report\models\Report */
-        $model = $this->getModel('Report', 'ga_report');
-        return $model;
+        return Container::get('gplcart\\modules\\ga_report\\models\\Report');
     }
 
 }

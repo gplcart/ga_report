@@ -9,8 +9,7 @@
 
 namespace gplcart\modules\ga_report\controllers;
 
-use gplcart\core\models\File as FileModel,
-    gplcart\core\models\Module as ModuleModel;
+use gplcart\core\models\File as FileModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
 
@@ -19,12 +18,6 @@ use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
  */
 class Settings extends BackendController
 {
-
-    /**
-     * Module model instance
-     * @var \gplcart\core\models\Module $module
-     */
-    protected $module;
 
     /**
      * File model instance
@@ -40,16 +33,13 @@ class Settings extends BackendController
 
     /**
      * @param FileModel $file
-     * @param ModuleModel $module
      * @param GaReportModuleReportModel $ga_report_model
      */
-    public function __construct(FileModel $file, ModuleModel $module,
-            GaReportModuleReportModel $ga_report_model)
+    public function __construct(FileModel $file, GaReportModuleReportModel $ga_report_model)
     {
         parent::__construct();
 
         $this->file = $file;
-        $this->module = $module;
         $this->ga_report_model = $ga_report_model;
     }
 
@@ -61,7 +51,7 @@ class Settings extends BackendController
         $this->setTitleEditSettings();
         $this->setBreadcrumbEditSettings();
 
-        $settings = $this->config->getFromModule('ga_report');
+        $settings = $this->module->getSettings('ga_report');
 
         $this->setData('settings', $settings);
         $this->setData('stores', $this->store->getList());
@@ -130,7 +120,7 @@ class Settings extends BackendController
      */
     protected function deleteCertificateSettings()
     {
-        $file = GC_DIR_PRIVATE_MODULE . '/' . $this->config->getFromModule('ga_report', 'certificate_file');
+        $file = GC_DIR_PRIVATE_MODULE . '/' . $this->module->getSettings('ga_report', 'certificate_file');
 
         if (file_exists($file) && unlink($file)) {
             $this->setMessage($this->text('Certificate has been deleted from the server'), 'success', true);
