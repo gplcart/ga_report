@@ -12,7 +12,7 @@ namespace gplcart\modules\ga_report\models;
 use gplcart\core\Cache,
     gplcart\core\Hook;
 use gplcart\core\models\Oauth as OauthModel,
-    gplcart\core\models\Language as LanguageModel;
+    gplcart\core\models\Translation as TranslationModel;
 use gplcart\core\exceptions\OauthAuthorization as OauthAuthorizationException;
 
 /**
@@ -28,10 +28,10 @@ class Report
     protected $hook;
 
     /**
-     * Language model instance
-     * @var \gplcart\core\models\Language $language
+     * Translation UI model instance
+     * @var \gplcart\core\models\Translation $translation
      */
-    protected $language;
+    protected $translation;
 
     /**
      * Oauth model instance
@@ -49,14 +49,14 @@ class Report
      * @param Hook $hook
      * @param Cache $cache
      * @param OauthModel $oauth
-     * @param LanguageModel $language
+     * @param TranslationModel $translation
      */
-    public function __construct(Hook $hook, Cache $cache, OauthModel $oauth, LanguageModel $language)
+    public function __construct(Hook $hook, Cache $cache, OauthModel $oauth, TranslationModel $translation)
     {
         $this->hook = $hook;
         $this->cache = $cache;
         $this->oauth = $oauth;
-        $this->language = $language;
+        $this->translation = $translation;
     }
 
     /**
@@ -76,7 +76,7 @@ class Report
         $handler = $this->getHandler($handler_id);
 
         if (empty($handler)) {
-            return array('error' => $this->language->text('Invalid Oauth provider'));
+            return array('error' => $this->translation->text('Invalid Oauth provider'));
         }
 
         $cache_key = "ga_report.$handler_id.{$data['store_id']}";
@@ -86,7 +86,10 @@ class Report
         $cache = $this->cache->get($cache_key, array('lifespan' => $data['cache']));
 
         if (!empty($data['cache']) && isset($cache)) {
-            return $report + array('data' => $cache, 'updated' => $this->cache->getFileMtime());
+            return $report + array(
+                'data' => $cache,
+                'updated' => $this->cache->getFileMtime()
+            );
         }
 
         try {
@@ -96,7 +99,7 @@ class Report
         }
 
         if (empty($token['access_token'])) {
-            return $report + array('error' => $this->language->text('Failed to get access token'));
+            return $report + array('error' => $this->translation->text('Failed to get access token'));
         }
 
         $data['query']['access_token'] = $token['access_token'];
@@ -106,7 +109,11 @@ class Report
             return $report + array('error' => $results['error']['message']);
         }
 
-        $report += array('data' => $results, 'updated' => GC_TIME);
+        $report += array(
+            'data' => $results,
+            'updated' => GC_TIME
+        );
+
         $this->cache->set($cache_key, $results);
         return $report;
     }
@@ -177,131 +184,12 @@ class Report
      */
     protected function getDefaultHandlers()
     {
-        return array(
-            'visit_date' => array(
-                'name' => $this->language->text('Visits by date'),
-                'query' => array(
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:date',
-                )
-            ),
-            'visit_country' => array(
-                'name' => $this->language->text('Visits by countries'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:country'
-                )
-            ),
-            'visit_city' => array(
-                'name' => $this->language->text('Visits by cities'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:city'
-                )
-            ),
-            'visit_language' => array(
-                'name' => $this->language->text('Visits by languages'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:language'
-                )
-            ),
-            'visit_browser' => array(
-                'name' => $this->language->text('Visits by browsers'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:browser'
-                )
-            ),
-            'visit_os' => array(
-                'name' => $this->language->text('Visits by OS'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:operatingSystem'
-                )
-            ),
-            'visit_resolution' => array(
-                'name' => $this->language->text('Visits by screen resolution'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:screenResolution'
-                )
-            ),
-            'visit_mobile_os' => array(
-                'name' => $this->language->text('Visits by mobile OS'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'segment' => 'gaid::-11',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:operatingSystem'
-                )
-            ),
-            'visit_mobile_resolution' => array(
-                'name' => $this->language->text('Visits by mobile resolution'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'segment' => 'gaid::-11',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:screenResolution'
-                )
-            ),
-            'pageview_date' => array(
-                'name' => $this->language->text('Pageviews by date'),
-                'query' => array(
-                    'dimensions' => 'ga:date',
-                    'metrics' => 'ga:pageviews'
-                )
-            ),
-            'content_statistic' => array(
-                'name' => $this->language->text('Content statistic'),
-                'query' => array(
-                    'metrics' => 'ga:pageviews,ga:uniquePageviews'
-                )
-            ),
-            'top_pages' => array(
-                'name' => $this->language->text('Top pages'),
-                'query' => array(
-                    'sort' => '-ga:pageviews',
-                    'metrics' => 'ga:pageviews',
-                    'dimensions' => 'ga:pagePath'
-                )
-            ),
-            'source' => array(
-                'name' => $this->language->text('Traffic sources'),
-                'query' => array(
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:medium',
-                )
-            ),
-            'keyword' => array(
-                'name' => $this->language->text('Keywords'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:keyword'
-                )
-            ),
-            'referral' => array(
-                'name' => $this->language->text('Referrals'),
-                'query' => array(
-                    'sort' => '-ga:visits',
-                    'metrics' => 'ga:visits',
-                    'dimensions' => 'ga:source'
-                )
-            ),
-            'audience' => array(
-                'name' => $this->language->text('Audience'),
-                'query' => array(
-                    'metrics' => 'ga:visitors,ga:newVisits,ga:percentNewVisits,ga:visits,ga:pageviews,ga:bounces,ga:visitBounceRate,ga:timeOnSite,ga:avgTimeOnSite',
-                )
-            )
-        );
+        $handlers = gplcart_config_get(__DIR__ . '/../config/handlers.php');
+        foreach ($handlers as &$handler) {
+            $handler['name'] = $this->translation->text($handler['name']);
+        }
+
+        return $handlers;
     }
 
 }

@@ -9,7 +9,7 @@
 
 namespace gplcart\modules\ga_report\controllers;
 
-use gplcart\core\models\File as FileModel;
+use gplcart\core\models\FileTransfer as FileTransferModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
 
@@ -20,10 +20,10 @@ class Settings extends BackendController
 {
 
     /**
-     * File model instance
-     * @var \gplcart\core\models\File $file
+     * File transfer model instance
+     * @var \gplcart\core\models\FileTransfer $file_transfer
      */
-    protected $file;
+    protected $file_transfer;
 
     /**
      * Google Analytics Report Report model instance
@@ -32,14 +32,15 @@ class Settings extends BackendController
     protected $ga_report_model;
 
     /**
-     * @param FileModel $file
+     * @param FileTransferModel $file_transfer
      * @param GaReportModuleReportModel $ga_report_model
      */
-    public function __construct(FileModel $file, GaReportModuleReportModel $ga_report_model)
+    public function __construct(FileTransferModel $file_transfer,
+            GaReportModuleReportModel $ga_report_model)
     {
         parent::__construct();
 
-        $this->file = $file;
+        $this->file_transfer = $file_transfer;
         $this->ga_report_model = $ga_report_model;
     }
 
@@ -52,6 +53,7 @@ class Settings extends BackendController
         $this->setBreadcrumbEditSettings();
 
         $settings = $this->module->getSettings('ga_report');
+        $settings += array('certificate_file' => '');
 
         $this->setData('settings', $settings);
         $this->setData('stores', $this->store->getList());
@@ -159,14 +161,14 @@ class Settings extends BackendController
 
         $this->validateElement('certificate_secret', 'required');
 
-        $result = $this->file->upload($upload, false, gplcart_file_private_module('ga_report'));
+        $result = $this->file_transfer->upload($upload, false, gplcart_file_private_module('ga_report'));
 
         if ($result !== true) {
             $this->setError('file', $result);
             return null;
         }
 
-        $file = $this->file->getTransferred();
+        $file = $this->file_transfer->getTransferred();
 
         $certs = array();
         $secret = $this->getSubmitted('certificate_secret');
@@ -175,7 +177,7 @@ class Settings extends BackendController
             return null;
         }
 
-        $this->setSubmitted('certificate_file', $this->file->path($file));
+        $this->setSubmitted('certificate_file', gplcart_file_relative($file));
     }
 
     /**

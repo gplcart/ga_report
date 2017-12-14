@@ -9,7 +9,7 @@
 
 namespace gplcart\modules\ga_report\handlers;
 
-use gplcart\core\helpers\Curl as CurlHelper;
+use gplcart\core\helpers\Socket as SocketClientHelper;
 
 /**
  * Provides methods to work with Google Analitics API
@@ -18,17 +18,17 @@ class Api
 {
 
     /**
-     * CURL helper class instance
-     * @var \gplcart\core\helpers\Curl $curl
+     * Socket client helper class instance
+     * @var \gplcart\core\helpers\SocketClient $socket
      */
-    protected $curl;
+    protected $socket;
 
     /**
-     * @param CurlHelper $curl
+     * @param SocketClientHelper $socket
      */
-    public function __construct(CurlHelper $curl)
+    public function __construct(SocketClientHelper $socket)
     {
-        $this->curl = $curl;
+        $this->socket = $socket;
     }
 
     /**
@@ -40,8 +40,8 @@ class Api
     public function process(array $params, array $provider)
     {
         try {
-            $result = $this->curl->get($provider['url']['process'], array('query' => $params));
-            return json_decode($result, true);
+            $result = $this->socket->request($provider['url']['process'], array('query' => $params));
+            return json_decode($result['data'], true);
         } catch (\Exception $ex) {
             trigger_error($ex->getMessage());
             return array();
