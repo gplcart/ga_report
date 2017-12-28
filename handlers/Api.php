@@ -9,7 +9,7 @@
 
 namespace gplcart\modules\ga_report\handlers;
 
-use gplcart\core\helpers\Socket as SocketClientHelper;
+use gplcart\core\helpers\SocketClient as SocketClientHelper;
 
 /**
  * Provides methods to work with Google Analitics API
