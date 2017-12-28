@@ -20,7 +20,7 @@ class Module
 
     /**
      * Model class instance
-     * @var \gplcart\core\Model $model
+     * @var \gplcart\core\Module $model
      */
     protected $module;
 
