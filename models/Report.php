@@ -9,11 +9,11 @@
 
 namespace gplcart\modules\ga_report\models;
 
+use Exception;
 use gplcart\core\Cache,
     gplcart\core\Hook;
 use gplcart\core\models\Oauth as OauthModel,
     gplcart\core\models\Translation as TranslationModel;
-use gplcart\core\exceptions\OauthAuthorization as OauthAuthorizationException;
 
 /**
  * Manages basic behaviors and data related to Google Analytics Report
@@ -51,7 +51,8 @@ class Report
      * @param OauthModel $oauth
      * @param TranslationModel $translation
      */
-    public function __construct(Hook $hook, Cache $cache, OauthModel $oauth, TranslationModel $translation)
+    public function __construct(Hook $hook, Cache $cache, OauthModel $oauth,
+            TranslationModel $translation)
     {
         $this->hook = $hook;
         $this->cache = $cache;
@@ -94,7 +95,7 @@ class Report
 
         try {
             $token = $this->oauth->exchangeTokenServer($provider, $provider['settings']);
-        } catch (OauthAuthorizationException $ex) {
+        } catch (Exception $ex) {
             return $report + array('error' => $ex->getMessage());
         }
 
