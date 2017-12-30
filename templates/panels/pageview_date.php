@@ -38,7 +38,7 @@
         <tbody>
           <?php foreach ($content['data']['report']['data']['rows'] as $row) { ?>
           <tr>
-            <td><?php echo $this->date($row[0], false, 'Ymd'); ?></td>
+            <td><?php echo $this->date(\DateTime::createFromFormat('Ymd', $row[0])->getTimestamp(), false); ?></td>
             <td><?php echo $this->e($row[1]); ?></td>
           </tr>
           <?php } ?>
