@@ -9,7 +9,7 @@
 
 namespace gplcart\modules\ga_report\handlers;
 
-use gplcart\core\helpers\SocketClient as SocketClientHelper;
+use gplcart\core\helpers\Socket as SocketHelper;
 
 /**
  * Provides methods to work with Google Analitics API
@@ -19,14 +19,14 @@ class Api
 
     /**
      * Socket client helper class instance
-     * @var \gplcart\core\helpers\SocketClient $socket
+     * @var \gplcart\core\helpers\Socket $socket
      */
     protected $socket;
 
     /**
-     * @param SocketClientHelper $socket
+     * @param SocketHelper $socket
      */
-    public function __construct(SocketClientHelper $socket)
+    public function __construct(SocketHelper $socket)
     {
         $this->socket = $socket;
     }
