@@ -33,6 +33,19 @@ class Main
     }
 
     /**
+     * Implements hook "module.install.before"
+     * @param null|string
+     */
+    public function hookModuleInstallBefore(&$result)
+    {
+        if (!extension_loaded('openssl')) {
+            /* @var $translation \gplcart\core\models\Translation */
+            $translation = gplcart_instance_model('Translation');
+            $result = $translation->text('OpenSSL extension is not enabled');
+        }
+    }
+
+    /**
      * Implements hook "route.list"
      * @param array $routes
      */
