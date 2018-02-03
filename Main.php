@@ -126,6 +126,35 @@ class Main
     }
 
     /**
+     * Returns a single handler data
+     * @param string $handler_id
+     * @return array
+     */
+    public function getHandler($handler_id)
+    {
+        return $this->getModel()->getHandler($handler_id);
+    }
+
+    /**
+     * Returns an array of Google Anylytics report
+     * @param array|string $handler Either an array of handler data or a handler ID
+     * @param array|null $settings An array of settings. If not provided, the module settings will be used
+     * @return array
+     */
+    public function getReport($handler, $settings = null)
+    {
+        if (!is_array($handler)) {
+            $handler = $this->getHandler($handler);
+        }
+
+        if (!isset($settings)) {
+            $settings = $this->module->getSettings('ga_report');
+        }
+
+        return $this->getModel()->get($handler, $settings);
+    }
+
+    /**
      * Returns the report model instance
      * @return \gplcart\modules\ga_report\models\Report
      */
