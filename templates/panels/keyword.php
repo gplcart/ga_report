@@ -10,13 +10,17 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <span class="pull-left">
-    <?php echo $this->e($content['data']['report']['handler']['name']); ?>
+    <?php echo $this->e($content['data']['handler']['name']); ?>
     </span>
     <span class="small pull-right">
       <?php if(isset($content['data']['report']['updated'])) { ?>
       <?php echo $this->text('Last updated: @date', array('@date' => $this->date($content['data']['report']['updated']))); ?>
       <?php } ?>
-      <a href="<?php echo $this->url('', array('ga' => array('update' => array('handler_id' => $content['data']['report']['handler']['id'], 'store_id' => $content['data']['settings']['store_id'])))); ?>">
+      <a href="<?php echo $this->url('', array(
+        'ga' => array(
+          'update' => array(
+            'handler_id' => $content['data']['handler']['id'],
+              'store_id' => $content['data']['settings']['store_id'])))); ?>">
         <i class="fa fa-refresh" title="<?php echo $this->text('Update'); ?>"></i>
       </a>
     </span>
@@ -27,7 +31,6 @@
     <?php } else if (empty($content['data']['report']['data']['rows'])) { ?>
     <?php echo $this->text('No results'); ?>
     <?php } else { ?>
-    <div data-chart-source="<?php echo $this->json($content['data']['report']['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->e($content['data']['report']['handler']['id']); ?>">
       <table class="table table-condensed table-striped">
         <thead>
           <tr>
@@ -38,13 +41,12 @@
         <tbody>
           <?php foreach ($content['data']['report']['data']['rows'] as $row) { ?>
           <tr>
-            <td><?php echo $this->truncate($this->e($row[0]), 100); ?></td>
-            <td><?php echo $this->e($row[1]); ?></td>
+            <td><?php echo $this->truncate($this->e($row['ga:keyword']), 100); ?></td>
+            <td><?php echo $this->e($row['ga:pageviews']); ?></td>
           </tr>
           <?php } ?>
         </tbody>
       </table>
-    </div>
     <?php } ?>
   </div>
 </div>

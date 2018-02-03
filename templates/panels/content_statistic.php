@@ -10,13 +10,17 @@
 <div class="panel panel-default">
   <div class="panel-heading clearfix">
     <span class="pull-left">
-    <?php echo $this->e($content['data']['report']['handler']['name']); ?>
+    <?php echo $this->e($content['data']['handler']['name']); ?>
     </span>
     <span class="small pull-right">
       <?php if(isset($content['data']['report']['updated'])) { ?>
       <?php echo $this->text('Last updated: @date', array('@date' => $this->date($content['data']['report']['updated']))); ?>
       <?php } ?>
-      <a href="<?php echo $this->url('', array('ga' => array('update' => array('handler_id' => $content['data']['report']['handler']['id'], 'store_id' => $content['data']['settings']['store_id'])))); ?>">
+      <a href="<?php echo $this->url('', array(
+        'ga' => array(
+          'update' => array(
+            'handler_id' => $content['data']['handler']['id'],
+              'store_id' => $content['data']['settings']['store_id'])))); ?>">
         <i class="fa fa-refresh" title="<?php echo $this->text('Update'); ?>"></i>
       </a>
     </span>
@@ -27,24 +31,34 @@
     <?php } else if (empty($content['data']['report']['data']['rows'])) { ?>
     <?php echo $this->text('No results'); ?>
     <?php } else { ?>
-    <div data-chart-source="<?php echo $this->json($content['data']['report']['data']['rows']); ?>" data-chart-id="ga_<?php echo $this->e($content['data']['report']['handler']['id']); ?>">
-      <table class="table table-condensed table-striped">
-        <thead>
-          <tr>
-            <th><?php echo $this->text('Views'); ?></th>
-            <th><?php echo $this->text('Unique visits'); ?></th>
-          </tr>
-        </thead>
+      <table class="table table-condensed">
         <tbody>
-          <?php foreach ($content['data']['report']['data']['rows'] as $row) { ?>
-          <tr>
-            <td><?php echo $this->e($row[0]); ?></td>
-            <td><?php echo $this->e($row[1]); ?></td>
-          </tr>
-          <?php } ?>
+        <tr>
+          <th><?php echo $this->text('Views'); ?></th>
+          <td><?php echo $this->e($content['data']['report']['data']['rows'][0]['ga:pageviews']); ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $this->text('Unique visits'); ?></th>
+          <td><?php echo $this->e($content['data']['report']['data']['rows'][0]['ga:uniquePageviews']); ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $this->text('Avg. Time on Page'); ?></th>
+          <td><?php echo $this->e(round($content['data']['report']['data']['rows'][0]['ga:avgTimeOnPage'], 2)); ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $this->text('Pages / Session'); ?></th>
+          <td><?php echo $this->e($content['data']['report']['data']['rows'][0]['ga:pageviewsPerSession']); ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $this->text('Entrances / Pageviews'); ?></th>
+          <td><?php echo $this->e(round($content['data']['report']['data']['rows'][0]['ga:entranceRate'], 2)); ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $this->text('% Exit'); ?></th>
+          <td><?php echo $this->e(round($content['data']['report']['data']['rows'][0]['ga:exitRate'], 2)); ?></td>
+        </tr>
         </tbody>
       </table>
-    </div>
     <?php } ?>
   </div>
 </div>

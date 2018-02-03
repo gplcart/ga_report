@@ -9,7 +9,6 @@
 
 namespace gplcart\modules\ga_report\controllers;
 
-use gplcart\core\models\Oauth as OauthModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
 
@@ -20,31 +19,24 @@ class Report extends BackendController
 {
 
     /**
-     * Google Analytics Report Report model instance
+     * Report model instance
      * @var \gplcart\modules\ga_report\models\Report $ga_report_model
      */
     protected $ga_report_model;
 
     /**
-     * Oauth model instance
-     * @var \gplcart\core\models\Oauth $oauth
-     */
-    protected $oauth;
-
-    /**
-     * @param OauthModel $oauth
      * @param GaReportModuleReportModel $model
      */
-    public function __construct(OauthModel $oauth, GaReportModuleReportModel $model)
+    public function __construct(GaReportModuleReportModel $model)
     {
         parent::__construct();
 
-        $this->oauth = $oauth;
         $this->ga_report_model = $model;
     }
 
     /**
-     * Route page callback to display the Google Analytics report page
+     * Route callback
+     * Displays the report page
      */
     public function listReport()
     {
@@ -57,14 +49,34 @@ class Report extends BackendController
         $this->setData('panels', $this->getPanelsReport());
 
         $default = $this->module->getSettings('ga_report', 'store_id');
-        $store_id = $this->getQuery('ga.update.store_id', $default);
-        $this->setData('ga_store_id', $store_id);
+        $this->setData('ga_store_id', $this->getQuery('ga.update.store_id', $default));
 
         $this->outputListReport();
     }
 
     /**
-     * Clear GA cache
+     * Set title on the report page
+     */
+    protected function setTitleListReport()
+    {
+        $this->setTitle($this->text('Google Analytics'));
+    }
+
+    /**
+     * Set breadcrumbs on the report page
+     */
+    protected function setBreadcrumbListReport()
+    {
+        $breadcrumb = array(
+            'url' => $this->url('admin'),
+            'text' => $this->text('Dashboard')
+        );
+
+        $this->setBreadcrumb($breadcrumb);
+    }
+
+    /**
+     * Clear cache
      */
     protected function clearCacheReport()
     {
@@ -76,60 +88,39 @@ class Report extends BackendController
     }
 
     /**
-     * Returns an array of Google Analytics panels
+     * Returns an array of report panels
      * @return array
      */
     protected function getPanelsReport()
     {
         $settings = $this->module->getSettings('ga_report');
-        $store_id = $this->getQuery('ga.update.store_id', '');
+        $store_id = $this->getQuery('ga.update.store_id');
 
-        if (isset($store_id)) {
+        if (!empty($store_id)) {
             $settings['store_id'] = $store_id;
         }
 
-        if (empty($settings['ga_profile_id'][$settings['store_id']])) {
-            $settings['query'] = array();
-        } else {
-            $settings['query'] = array(
-                'max-results' => $settings['limit'],
-                'end-date' => date('Y-m-d', strtotime($settings['end_date'])),
-                'start-date' => date('Y-m-d', strtotime($settings['start_date'])),
-                'ids' => 'ga:' . $settings['ga_profile_id'][$settings['store_id']]
-            );
-        }
-
         $panels = array();
+
         foreach ($this->ga_report_model->getHandlers() as $handler) {
-            $report = $this->ga_report_model->get($handler['id'], $settings);
-            if (isset($report['handler']['template'])) {
-                $data = array('content' => array('data' => array('report' => $report, 'settings' => $settings)));
-                $panels[$handler['id']] = array('rendered' => $this->render($report['handler']['template'], $data));
-            }
+
+            $report = $this->ga_report_model->get($handler, $settings);
+
+            $data = array(
+                'content' => array(
+                    'data' => array( // We need so deep nesting for compatibility with dashboard panel templates
+                        'report' => $report,
+                        'handler' => $handler,
+                        'settings' => $settings
+                    )
+                )
+            );
+
+            $panels[$handler['id']] = array(
+                'rendered' => $this->render($handler['template'], $data));
         }
 
-        return gplcart_array_split($panels, 3);
-    }
-
-    /**
-     * Set title on the Google Analytics report page
-     */
-    protected function setTitleListReport()
-    {
-        $this->setTitle($this->text('Google Analytics'));
-    }
-
-    /**
-     * Set breadcrumbs on the Google Analytics report page
-     */
-    protected function setBreadcrumbListReport()
-    {
-        $breadcrumb = array(
-            'url' => $this->url('admin'),
-            'text' => $this->text('Dashboard')
-        );
-
-        $this->setBreadcrumb($breadcrumb);
+        return gplcart_array_split($panels, 3); // Split by columns
     }
 
     /**

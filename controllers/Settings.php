@@ -9,7 +9,6 @@
 
 namespace gplcart\modules\ga_report\controllers;
 
-use gplcart\core\models\FileTransfer as FileTransferModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
 
@@ -20,48 +19,48 @@ class Settings extends BackendController
 {
 
     /**
-     * File transfer model instance
-     * @var \gplcart\core\models\FileTransfer $file_transfer
-     */
-    protected $file_transfer;
-
-    /**
      * Google Analytics Report Report model instance
      * @var \gplcart\modules\ga_report\models\Report $ga_report_model
      */
     protected $ga_report_model;
 
     /**
-     * @param FileTransferModel $file_transfer
      * @param GaReportModuleReportModel $ga_report_model
      */
-    public function __construct(FileTransferModel $file_transfer,
-            GaReportModuleReportModel $ga_report_model)
+    public function __construct(GaReportModuleReportModel $ga_report_model)
     {
         parent::__construct();
 
-        $this->file_transfer = $file_transfer;
         $this->ga_report_model = $ga_report_model;
     }
 
     /**
-     * Route page callback to display the module settings page
+     * Route page callback
+     * Displays the module settings page
      */
     public function editSettings()
     {
         $this->setTitleEditSettings();
         $this->setBreadcrumbEditSettings();
 
-        $settings = $this->module->getSettings('ga_report');
-        $settings += array('certificate_file' => '');
-
-        $this->setData('settings', $settings);
         $this->setData('stores', $this->store->getList());
+        $this->setData('credentials', $this->getCredentialSettings());
         $this->setData('handlers', $this->ga_report_model->getHandlers());
-        $this->setData('certificate_file', $settings['certificate_file']);
+        $this->setData('settings', $this->module->getSettings('ga_report'));
 
         $this->submitSettings();
         $this->outputEditSettings();
+    }
+
+    /**
+     * Returns an array of Google API credentials
+     * @return array
+     */
+    protected function getCredentialSettings()
+    {
+        /** @var \gplcart\modules\gapi\Main $instance */
+        $instance = $this->module->getInstance('gapi');
+        return $instance->getCredentials(array('type' => 'service'));
     }
 
     /**
@@ -69,8 +68,9 @@ class Settings extends BackendController
      */
     protected function setTitleEditSettings()
     {
-        $vars = array('%name' => $this->text('Google Analytics Report'));
-        $title = $this->text('Edit %name settings', $vars);
+        $title = $this->text('Edit %name settings', array(
+            '%name' => $this->text('Google Analytics Report')));
+
         $this->setTitle($title);
     }
 
@@ -101,8 +101,6 @@ class Settings extends BackendController
     {
         if ($this->isPosted('clear_cache')) {
             $this->deleteCacheSettings();
-        } else if ($this->isPosted('delete_certificate')) {
-            $this->deleteCertificateSettings();
         } else if ($this->isPosted('save') && $this->validateSettings()) {
             $this->updateSettings();
         }
@@ -118,66 +116,49 @@ class Settings extends BackendController
     }
 
     /**
-     * Deletes a certificate file
-     */
-    protected function deleteCertificateSettings()
-    {
-        $file = GC_DIR_PRIVATE_MODULE . '/' . $this->module->getSettings('ga_report', 'certificate_file');
-
-        if (file_exists($file) && unlink($file)) {
-            $this->setMessage($this->text('Certificate has been deleted from the server'), 'success', true);
-        }
-
-        $this->setSubmitted('certificate_file', '');
-    }
-
-    /**
      * Validate submitted module settings
      */
     protected function validateSettings()
     {
         $this->setSubmitted('settings');
 
-        $this->validateElement('end_date', 'dateformat');
-        $this->validateElement('start_date', 'dateformat');
         $this->validateElement('limit', 'regexp', '/^[\d]{1,3}$/');
         $this->validateElement('cache', 'regexp', '/^[\d]{1,8}$/');
+        $this->validateElement('credential_id', 'regexp', '/^[\d]{1,10}$/');
 
-        $this->validateCertificateSettings();
+        $this->validateGaProfileSettings();
 
         return !$this->hasErrors();
     }
 
     /**
-     * Validates uploaded certificate file
+     * Validates Google Analytics profiles
      */
-    protected function validateCertificateSettings()
+    protected function validateGaProfileSettings()
     {
-        $upload = $this->request->file('file');
+        $profiles = $this->getSubmitted('ga_profile_id', array());
 
-        if (empty($upload)) {
-            return null;
+        if (empty($profiles)) {
+            $this->setError('ga_profile_id', $this->text('Profile ID is required'));
+            return false;
         }
 
-        $this->validateElement('certificate_secret', 'required');
+        $stores = $this->store->getList();
 
-        $result = $this->file_transfer->upload($upload, false, gplcart_file_private_module('ga_report'));
+        foreach ($profiles as $store_id => $profile_id) {
 
-        if ($result !== true) {
-            $this->setError('file', $result);
-            return null;
+            if (empty($profile_id)) {
+                $this->setError('ga_profile_id', $this->text('Profile ID is required'));
+                return false;
+            }
+
+            if (empty($stores[$store_id])) {
+                $this->setError('ga_profile_id', $this->text('Unknown store ID'));
+                return false;
+            }
         }
 
-        $file = $this->file_transfer->getTransferred();
-
-        $certs = array();
-        $secret = $this->getSubmitted('certificate_secret');
-        if (!openssl_pkcs12_read(file_get_contents($file), $certs, $secret)) {
-            $this->setError('file', $this->text('Failed to read certificate'));
-            return null;
-        }
-
-        $this->setSubmitted('certificate_file', gplcart_file_relative($file));
+        return true;
     }
 
     /**
@@ -186,6 +167,7 @@ class Settings extends BackendController
     protected function updateSettings()
     {
         $this->controlAccess('module_edit');
+
         $this->module->setSettings('ga_report', $this->getSubmitted());
         $this->redirect('', $this->text('Settings have been updated'), 'success');
     }

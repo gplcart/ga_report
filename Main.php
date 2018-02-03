@@ -9,8 +9,8 @@
 
 namespace gplcart\modules\ga_report;
 
-use gplcart\core\Module,
-    gplcart\core\Container;
+use gplcart\core\Container;
+use gplcart\core\Module;
 
 /**
  * Main class for Google Analytics Report module
@@ -33,19 +33,6 @@ class Main
     }
 
     /**
-     * Implements hook "module.install.before"
-     * @param null|string
-     */
-    public function hookModuleInstallBefore(&$result)
-    {
-        if (!extension_loaded('openssl')) {
-            /* @var $translation \gplcart\core\models\Translation */
-            $translation = gplcart_instance_model('Translation');
-            $result = $translation->text('OpenSSL extension is not enabled');
-        }
-    }
-
-    /**
      * Implements hook "route.list"
      * @param array $routes
      */
@@ -59,7 +46,9 @@ class Main
         );
 
         $routes['admin/report/ga'] = array(
-            'menu' => array('admin' => /* @text */'Google Analytics'),
+            'menu' => array(
+                'admin' => 'Google Analytics' // @text
+            ),
             'access' => 'ga_report',
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\ga_report\\controllers\\Report', 'listReport')
@@ -73,28 +62,7 @@ class Main
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['ga_report'] = /* @text */'Google Analytics Report: access';
-    }
-
-    /**
-     * Implements hook "oauth.providers"
-     * @param array $providers
-     */
-    public function hookOauthProviders(array &$providers)
-    {
-        $providers['ga'] = array(
-            'name' => /* @text */'Google Analytics',
-            'settings' => $this->module->getSettings('ga_report'),
-            'url' => array(
-                'process' => 'https://www.googleapis.com/analytics/v3/data/ga',
-                'token' => 'https://www.googleapis.com/oauth2/v4/token'
-            ),
-            'scope' => 'https://www.googleapis.com/auth/analytics.readonly',
-            'handlers' => array(
-                'token' => array('gplcart\\modules\\ga_report\\handlers\\Api', 'token'),
-                'process' => array('gplcart\\modules\\ga_report\\handlers\\Api', 'process'),
-            )
-        );
+        $permissions['ga_report'] = 'Google Analytics Report: access'; // @text
     }
 
     /**
@@ -115,7 +83,7 @@ class Main
 
             $weight++;
 
-            $report = $model->get($id, $settings);
+            $report = $model->get($handler, $settings);
 
             $handlers["ga_$id"] = array(
                 'status' => true,
@@ -123,8 +91,12 @@ class Main
                 'title' => $handler['name'],
                 'template' => $handler['template'],
                 'handlers' => array(
-                    'data' => function() use ($report, $settings) {
-                        return array('report' => $report, 'settings' => $settings);
+                    'data' => function () use ($handler, $report, $settings) {
+                        return array(
+                            'report' => $report,
+                            'handler' => $handler,
+                            'settings' => $settings
+                        );
                     }
                 )
             );
@@ -159,7 +131,9 @@ class Main
      */
     protected function getModel()
     {
-        return Container::get('gplcart\\modules\\ga_report\\models\\Report');
+        /** @var \gplcart\modules\ga_report\models\Report $instance */
+        $instance = Container::get('gplcart\\modules\\ga_report\\models\\Report');
+        return $instance;
     }
 
 }
