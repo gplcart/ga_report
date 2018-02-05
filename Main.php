@@ -113,6 +113,7 @@ class Main
             $store_id = $controller->getQuery('ga.update.store_id', '');
             $handler_id = $controller->getQuery('ga.update.handler_id', '');
             $this->getModel()->clearCache($handler_id, $store_id);
+            $controller->redirect();
         }
     }
 
