@@ -53,18 +53,17 @@ class Report
     /**
      * Returns an array of parsed reporting data
      * @param array $handler
-     * @param string|array $settings
+     * @param array $settings
      * @return array
      * @throws OutOfRangeException
      */
-    public function get($handler, $settings)
+    public function get(array $handler, array $settings)
     {
-        if (empty($handler['id'])) {
-            throw new OutOfRangeException('Handler ID is empty');
-        }
+        $report = null;
+        $this->hook->attach('module.ga_report.get.before', $handler, $settings, $report, $this);
 
-        if (empty($settings['store_id'])) {
-            throw new OutOfRangeException('Store ID is empty in the settings');
+        if (isset($report)) {
+            return $report;
         }
 
         if (empty($settings['ga_profile_id'][$settings['store_id']])) {
@@ -93,6 +92,8 @@ class Report
 
         $report = array('data' => $results, 'updated' => GC_TIME);
         $this->cache->set($cache_key, $results);
+
+        $this->hook->attach('module.ga_report.get.after', $handler, $settings, $report, $this);
         return $report;
     }
 
