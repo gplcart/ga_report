@@ -7,7 +7,7 @@
  */
 ?>
 <?php if($this->access('ga_report')) { ?>
-<div class="panel panel-default">
+  <div class="panel panel-default" id="ga-report-panel-<?php echo $content['data']['handler']['id']; ?>">
   <div class="panel-heading clearfix">
     <span class="pull-left">
     <?php echo $this->e($content['data']['handler']['name']); ?>
@@ -37,7 +37,7 @@
             <th><?php echo $this->text('Source'); ?></th>
             <th><?php echo $this->text('Medium'); ?></th>
             <th><?php echo $this->text('Campaign'); ?></th>
-            <th><?php echo $this->text('Visits'); ?></th>
+            <th><?php echo $this->text('Pageviews'); ?></th>
           </tr>
         </thead>
         <tbody>
