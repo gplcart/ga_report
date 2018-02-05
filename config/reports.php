@@ -46,7 +46,6 @@ return array(
             'date' => array('30DaysAgo', 'today')
         )
     ),
-
     'visit_browser' => array(
         'name' => 'Visits by browsers', // @text
         'template' => 'ga_report|panels/visit_browser',
