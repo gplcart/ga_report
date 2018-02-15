@@ -20,7 +20,7 @@
         'ga' => array(
           'update' => array(
             'handler_id' => $content['data']['handler']['id'],
-              'store_id' => $content['data']['settings']['store_id'])))); ?>">
+              'store_id' => $content['data']['settings']['store_id'])))); ?>#ga-report-panel-<?php echo $content['data']['handler']['id']; ?>">
         <i class="fa fa-refresh" title="<?php echo $this->text('Update'); ?>"></i>
       </a>
     </span>
