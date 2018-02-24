@@ -10,10 +10,10 @@
 namespace gplcart\modules\ga_report\models;
 
 use Exception;
-use OutOfRangeException;
 use gplcart\core\Cache;
 use gplcart\core\Hook;
 use gplcart\core\Module;
+use OutOfRangeException;
 
 /**
  * Manages basic behaviors and data related to Google Analytics Report

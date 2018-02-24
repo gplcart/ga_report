@@ -9,29 +9,30 @@
 
 namespace gplcart\modules\ga_report\controllers;
 
-use gplcart\core\controllers\backend\Controller as BackendController;
-use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
+use gplcart\core\controllers\backend\Controller;
+use gplcart\modules\ga_report\models\Report;
 
 /**
  * Handles incoming requests and outputs data related to Google Analytics Report module
  */
-class Settings extends BackendController
+class Settings extends Controller
 {
 
     /**
      * Google Analytics Report Report model instance
-     * @var \gplcart\modules\ga_report\models\Report $ga_report_model
+     * @var \gplcart\modules\ga_report\models\Report $report_model
      */
-    protected $ga_report_model;
+    protected $report_model;
 
     /**
-     * @param GaReportModuleReportModel $ga_report_model
+     * Settings constructor.
+     * @param Report $report_model
      */
-    public function __construct(GaReportModuleReportModel $ga_report_model)
+    public function __construct(Report $report_model)
     {
         parent::__construct();
 
-        $this->ga_report_model = $ga_report_model;
+        $this->report_model = $report_model;
     }
 
     /**
@@ -45,7 +46,7 @@ class Settings extends BackendController
 
         $this->setData('stores', $this->store->getList());
         $this->setData('credentials', $this->getCredentialSettings());
-        $this->setData('handlers', $this->ga_report_model->getHandlers());
+        $this->setData('handlers', $this->report_model->getHandlers());
         $this->setData('settings', $this->module->getSettings('ga_report'));
 
         $this->submitSettings();
@@ -68,9 +69,7 @@ class Settings extends BackendController
      */
     protected function setTitleEditSettings()
     {
-        $title = $this->text('Edit %name settings', array(
-            '%name' => $this->text('Google Analytics Report')));
-
+        $title = $this->text('Edit %name settings', array('%name' => $this->text('Google Analytics Report')));
         $this->setTitle($title);
     }
 
@@ -111,7 +110,7 @@ class Settings extends BackendController
      */
     protected function deleteCacheSettings()
     {
-        $this->ga_report_model->clearCache();
+        $this->report_model->clearCache();
         $this->redirect('', $this->text('Cache has been deleted'), 'success');
     }
 

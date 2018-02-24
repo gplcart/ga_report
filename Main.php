@@ -159,7 +159,7 @@ class Main
      * Returns the report model instance
      * @return \gplcart\modules\ga_report\models\Report
      */
-    protected function getModel()
+    public function getModel()
     {
         /** @var \gplcart\modules\ga_report\models\Report $instance */
         $instance = Container::get('gplcart\\modules\\ga_report\\models\\Report');

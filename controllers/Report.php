@@ -9,29 +9,29 @@
 
 namespace gplcart\modules\ga_report\controllers;
 
-use gplcart\core\controllers\backend\Controller as BackendController;
-use gplcart\modules\ga_report\models\Report as GaReportModuleReportModel;
+use gplcart\core\controllers\backend\Controller;
+use gplcart\modules\ga_report\models\Report as ReportModel;
 
 /**
  * Handles incoming requests and outputs data related to Google Analytics Report module
  */
-class Report extends BackendController
+class Report extends Controller
 {
 
     /**
      * Report model instance
-     * @var \gplcart\modules\ga_report\models\Report $ga_report_model
+     * @var \gplcart\modules\ga_report\models\Report $report_model
      */
-    protected $ga_report_model;
+    protected $report_model;
 
     /**
-     * @param GaReportModuleReportModel $model
+     * @param ReportModel $model
      */
-    public function __construct(GaReportModuleReportModel $model)
+    public function __construct(ReportModel $model)
     {
         parent::__construct();
 
-        $this->ga_report_model = $model;
+        $this->report_model = $model;
     }
 
     /**
@@ -42,7 +42,6 @@ class Report extends BackendController
     {
         $this->setTitleListReport();
         $this->setBreadcrumbListReport();
-
         $this->clearCacheReport();
 
         $this->setData('stores', $this->store->getList());
@@ -83,7 +82,7 @@ class Report extends BackendController
         if ($this->isQuery('ga.update')) {
             $store_id = $this->getQuery('ga.update.store_id', '');
             $handler_id = $this->getQuery('ga.update.handler_id', '');
-            $this->ga_report_model->clearCache($handler_id, $store_id);
+            $this->report_model->clearCache($handler_id, $store_id);
         }
     }
 
@@ -102,9 +101,9 @@ class Report extends BackendController
 
         $panels = array();
 
-        foreach ($this->ga_report_model->getHandlers() as $handler) {
+        foreach ($this->report_model->getHandlers() as $handler) {
 
-            $report = $this->ga_report_model->get($handler, $settings);
+            $report = $this->report_model->get($handler, $settings);
 
             $data = array(
                 'content' => array(
@@ -116,8 +115,7 @@ class Report extends BackendController
                 )
             );
 
-            $panels[$handler['id']] = array(
-                'rendered' => $this->render($handler['template'], $data));
+            $panels[$handler['id']] = array('rendered' => $this->render($handler['template'], $data));
         }
 
         return gplcart_array_split($panels, 3); // Split by columns
